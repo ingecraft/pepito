@@ -14,6 +14,3 @@ class Lead(Resource):
 
     def delete(self):
         pass
-
-
-

@@ -2,6 +2,8 @@ from db import db
 
 
 class Lead(db.Model):
+    __tablename__ = 'leads'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     surname = db.Column(db.String(80))

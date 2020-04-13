@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Api
 
 from db import db
+from resources.operator import Operator, OperatorList
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -17,6 +18,9 @@ def create_tables():
 api = Api(app)
 
 db.init_app(app)
+
+api.add_resource(Operator, '/operators/<string:username>')
+api.add_resource(OperatorList, '/operators')
 
 
 if __name__ == "__main__":

@@ -4,10 +4,6 @@ from models.operator import OperatorModel
 
 class Operator(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('username',
-                        type=str,
-                        required=True,
-                        help="Username is required")
     parser.add_argument('email',
                         type=str,
                         required=True,
@@ -38,7 +34,7 @@ class Operator(Resource):
             return {'message': 'An error occured during operator insertion'}, \
                     500
 
-        return operator.json(), 201
+        return operator.json()
 
     def put(self, username):
         operator = OperatorModel.find_by_username(username)

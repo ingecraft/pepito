@@ -1,4 +1,4 @@
-from flask_resftul import Resource, reqparse
+from flask_restful import Resource, reqparse
 from models.people.lead import LeadModel
 
 
@@ -24,19 +24,6 @@ class Lead(Resource):
             return lead.json()
 
         return {'message': 'There is no lead with this email'}
-
-    def post(self):
-        data = self.parser.parse_args()
-        lead = LeadModel.find_by_email(data['email'])
-
-        if lead:
-            return {'message': 'There is already a lead with this email'}
-
-        try:
-            lead.save_to_db()
-        except Exception:
-            return {'message': 'An error occured during operator insertion'}, \
-                    500
 
     def put(self):
         data = self.parser.parse_args()
@@ -67,6 +54,31 @@ class Lead(Resource):
 
 
 class LeadList(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('email',
+                        type=str,
+                        required=True,
+                        help="Email is required")
+    parser.add_argument('phone',
+                        type=str,
+                        required=True,
+                        help="Phone is required")
+    parser.add_argument('name',
+                        type=str)
+    parser.add_argument('surname',
+                        type=str)
+
     def get(self):
         return {'leads': [lead.json() for lead in
                           LeadModel.query.all()]}
+
+    def post(self):
+        data = self.parser.parse_args()
+
+        if LeadModel.find_by_email(data['email']):
+            return {'message': 'There is already a lead with this email'}
+
+        lead = LeadModel(**data)
+        lead.save_to_db()
+
+        return {'message': 'resource created'}

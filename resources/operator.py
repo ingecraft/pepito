@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from models.operator import OperatorModel
+from models.people.operator import OperatorModel
 
 
 class Operator(Resource):

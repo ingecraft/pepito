@@ -1,7 +1,7 @@
 from db import db
 
 
-class Lead(db.Model):
+class LeadModel(db.Model):
     __tablename__ = 'leads'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -18,9 +18,8 @@ class Lead(db.Model):
         self.email = email
 
     @classmethod
-    def get_by_id(cls, _id):
-        lead = cls.query.filter_by(id=_id).first()
-        return lead
+    def get_by_email(cls, email):
+        return cls.query.filter_by(email=email).first()
 
     def save_to_db(self):
         db.session.add(self)

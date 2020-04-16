@@ -27,3 +27,7 @@ class LeadModel(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+    def json(self):
+        return {'id': self.id, 'email': self.email,
+                'phone': self.phone, 'surname': self.surname}

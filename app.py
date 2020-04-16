@@ -20,9 +20,9 @@ api = Api(app)
 
 db.init_app(app)
 
-api.add_resource(Operator, '/operators/<string:username>')
+api.add_resource(Operator, '/operators/<int:id>')
 api.add_resource(OperatorList, '/operators')
-api.add_resource(Lead, '/leads/<string:username>')
+api.add_resource(Lead, '/leads/<int:id>')
 api.add_resource(LeadList, '/leads')
 
 

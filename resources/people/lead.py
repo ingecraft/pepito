@@ -1,51 +1,48 @@
 from flask_restful import Resource, reqparse
+
 from models.people.lead import LeadModel
 
 
 class Lead(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('email',
-                        type=str,
-                        required=True,
-                        help="Email is required")
+                        type=str)
     parser.add_argument('phone',
-                        type=str,
-                        required=True,
-                        help="Phone is required")
+                        type=str)
     parser.add_argument('name',
                         type=str)
     parser.add_argument('surname',
                         type=str)
 
-    def get(self, email):
-        lead = LeadModel.find_by_email(email)
+    def get(self, id):
+        lead = LeadModel.find_by_id(id)
 
         if lead:
             return lead.json()
 
         return {'message': 'There is no lead with this email'}
 
-    def put(self):
-        data = self.parser.parse_args()
-        lead = LeadModel.find_by_email(data('email'))
+    def put(self, id):
+        lead = LeadModel.find_by_id(id)
 
         if lead:
-            lead.email = data['email']
-            lead.phone = data['phone']
-            lead.name = data['name']
-            lead.surname = data['surname']
-        else:
+            data = self.parser.parse_args()
+
+            for attribute, value in data.items():
+                if value:
+                    setattr(lead, attribute, value)
+
             try:
                 lead.save_to_db()
             except Exception:
-                return {'message': 'An error occured during operator'
-                        'insertion'}
+                return {'message': 'An error occured inserting a lead'}, 500
 
-        return lead.json()
+            return lead.json()
 
-    def delete(self):
-        data = self.parser.parse_args()
-        lead = LeadModel.find_by_email(data('email'))
+        return {'message': 'There is no lead with this id'}
+
+    def delete(self, id):
+        lead = LeadModel.find_by_id(id)
 
         if lead:
             lead.delete_from_db()
@@ -79,6 +76,10 @@ class LeadList(Resource):
             return {'message': 'There is already a lead with this email'}
 
         lead = LeadModel(**data)
-        lead.save_to_db()
 
-        return {'message': 'resource created'}
+        try:
+            lead.save_to_db()
+        except Exception:
+            return {'message': 'An error occured inserting a lead'}, 500
+
+        return lead.json()

@@ -1,59 +1,49 @@
 from flask_restful import Resource, reqparse
+
 from models.people.operator import OperatorModel
 
 
 class Operator(Resource):
     parser = reqparse.RequestParser()
+    parser.add_argument('username',
+                        type=str)
     parser.add_argument('email',
-                        type=str,
-                        required=True,
-                        help="Email is required")
+                        type=str)
     parser.add_argument('name',
                         type=str)
     parser.add_argument('surname',
                         type=str)
 
-    def get(self, username):
-        operator = OperatorModel.find_by_username(username)
+    def get(self, id):
+        operator = OperatorModel.find_by_id(id)
 
         if operator:
             return operator.json()
 
-        return {'message': "Username does not exist"}
+        return {'message': "There is no operator with given id"}
 
-    def post(self, username):
-        if OperatorModel.find_by_username(username):
-            return {'message': 'Username already exists'}
-
-        data = self.parser.parse_args()
-        operator = OperatorModel(username, **data)
-
-        try:
-            operator.save_to_db()
-        except Exception:
-            return {'message': 'An error occured during operator insertion'}, \
-                    500
-
-        return operator.json()
-
-    def put(self, username):
-        operator = OperatorModel.find_by_username(username)
-
-        data = self.parser.parse_args()
+    def put(self, id):
+        operator = OperatorModel.find_by_id(id)
 
         if operator:
-            operator.email = data['email']
-            operator.name = data['name']
-            operator.surname = data['surname']
-        else:
-            operator = OperatorModel(username, **data)
+            data = self.parser.parse_args()
 
-        operator.save_to_db()
+            for attribute, value in data.items():
+                if value:
+                    setattr(operator, attribute, value)
 
-        return operator.json()
+            try:
+                operator.save_to_db()
+            except Exception:
+                return {'message': 'An error occured inserting an operator'}, \
+                        500
 
-    def delete(self, username):
-        operator = OperatorModel.find_by_username(username)
+            return operator.json()
+
+        return {'message': 'There is no operator with this id'}
+
+    def delete(self, id):
+        operator = OperatorModel.find_by_id(id)
 
         if operator:
             operator.delete_from_db()
@@ -62,6 +52,33 @@ class Operator(Resource):
 
 
 class OperatorList(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('username',
+                        type=str,
+                        required=True,
+                        help="Username is required")
+    parser.add_argument('email',
+                        type=str)
+    parser.add_argument('name',
+                        type=str)
+    parser.add_argument('surname',
+                        type=str)
+
     def get(self):
         return {'operators': [operator.json() for operator in
                               OperatorModel.query.all()]}
+
+    def post(self):
+        data = self.parser.parse_args()
+
+        if OperatorModel.find_by_username(data['username']):
+            return {'message': 'Username already exists'}
+
+        operator = OperatorModel(**data)
+
+        try:
+            operator.save_to_db()
+        except Exception:
+            return {'message': 'An error occured inserting an operator'}, 500
+
+        return operator.json()

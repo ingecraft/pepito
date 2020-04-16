@@ -17,6 +17,10 @@ class LeadModel(db.Model):
         self.surname = surname
 
     @classmethod
+    def find_by_id(cls, _id):
+        return cls.query.filter_by(id=_id).first()
+
+    @classmethod
     def find_by_email(cls, email):
         return cls.query.filter_by(email=email).first()
 
@@ -24,10 +28,10 @@ class LeadModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def delete(self):
+    def delete_from_db(self):
         db.session.delete(self)
         db.session.commit()
 
     def json(self):
-        return {'id': self.id, 'email': self.email,
-                'phone': self.phone, 'surname': self.surname}
+        return {'id': self.id, 'email': self.email, 'phone': self.phone,
+                'name': self.name, 'surname': self.surname}

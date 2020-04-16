@@ -17,6 +17,10 @@ class OperatorModel(db.Model):
         self.surname = surname
 
     @classmethod
+    def find_by_id(cls, _id):
+        return cls.query.filter_by(id=_id).first()
+
+    @classmethod
     def find_by_username(cls, username):
         return cls.query.filter_by(username=username).first()
 
@@ -29,5 +33,5 @@ class OperatorModel(db.Model):
         db.session.commit()
 
     def json(self):
-        return {'username': self.username, 'email': self.email,
+        return {'id': self.id, 'username': self.username, 'email': self.email,
                 'name': self.name, 'surname': self.surname}

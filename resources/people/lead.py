@@ -35,7 +35,7 @@ class Lead(Resource):
             try:
                 lead.save_to_db()
             except Exception:
-                return {'message': 'An error occured inserting a lead'}, 500
+                return {'message': 'An error occured updating a lead'}, 500
 
             return lead.json()
 

@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Api
+from flask_migrate import Migrate
 
 from config import config
 from db import db
@@ -20,6 +21,7 @@ def create_tables():
 api = Api(app)
 
 db.init_app(app)
+migrate = Migrate(app, db)
 
 api.add_resource(Operator, '/operators/<int:id>')
 api.add_resource(OperatorList, '/operators')

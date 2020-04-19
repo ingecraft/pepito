@@ -12,7 +12,9 @@ class DonationModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     frequency = db.Column(frequencies_enum)
     amount = db.Column(db.Float(precision=2))
-    date_created = db.Column(db.DateTime)
+    created_on = db.Column(db.DateTime, default=db.func.now())
+    updated_on = db.Column(db.DateTime, default=db.func.now(),
+                           onupdate=db.func.now())
 
     lead_id = db.Column(db.Integer, db.ForeignKey('leads.id'))
     lead = db.relationship('LeadModel')
@@ -20,16 +22,20 @@ class DonationModel(db.Model):
     operator_id = db.Column(db.Integer, db.ForeignKey('operators.id'))
     operator = db.relationship('OperatorModel')
 
-    def __init__(self, frequency, amount, date_created, lead_id, operator_id):
+    def __init__(self, frequency, amount, lead_id, operator_id):
         self.frequency = frequency
         self.amount = amount
-        self.date_created = date_created
         self.lead_id = lead_id
         self.operator_id = operator_id
 
     @classmethod
     def find_by_id(cls, _id):
         donation = cls.query.filter_by(id=_id).first()
+        return donation
+
+    @classmethod
+    def find_by_lead_id(cls, lead_id):
+        donation = cls.query.filter_by(lead_id=lead_id).first()
         return donation
 
     def save_to_db(self):
@@ -42,5 +48,4 @@ class DonationModel(db.Model):
 
     def json(self):
         return {'frequency': self.frequency, 'amount': self.amount,
-                'date_created': self.date_created, 'lead_id': self.lead_id,
-                'operator_id': self.operator_id}
+                'lead_id': self.lead_id, 'operator_id': self.operator_id}

@@ -40,6 +40,7 @@ class Donation(Resource):
 #
 #        return {'message': 'There is no appeal with this id'}
 #
+
     def delete(self, id):
         pass
 #        appeal = AppealModel.find_by_id(id)
@@ -62,10 +63,6 @@ class DonationList(Resource):
                         type=float,
                         required=True,
                         help='Amount is required')
-    parser.add_argument('date_created',
-                        type=datetime.time,
-                        required=True,
-                        help='Amount is required')
     parser.add_argument('operator_id',
                         type=int,
                         required=True,
@@ -83,14 +80,14 @@ class DonationList(Resource):
     def post(self):
         data = self.parser.parse_args()
 
-        if DonationModel.find_by_url(data['url']):
-            return {'message': 'There is already a lead with this url'}
+        if DonationModel.find_by_lead_id(data['lead_id']):
+            return {'message': 'There is already a donation for this lead'}
 
-        appeal = AppealModel(**data)
+        donation = DonationModel(**data)
 
         try:
-            appeal.save_to_db()
+            donation.save_to_db()
         except Exception:
-            return {'message': 'An error occured inserting an appeal'}, 500
+            return {'message': 'An error occured inserting the donation'}, 500
 
-        return appeal.json()
+        return donation.json()

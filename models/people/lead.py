@@ -12,6 +12,9 @@ class LeadModel(db.Model):
 
     calls = db.relationship('CallModel', lazy='dynamic')
 
+    appeal_id = db.Column(db.Integer, db.ForeignKey('appeals.id'))
+    appeal = db.relationship('AppealModel')
+
     def __init__(self, email, phone, name, surname):
         self.email = email
         self.phone = phone
@@ -37,4 +40,5 @@ class LeadModel(db.Model):
     def json(self):
         return {'id': self.id, 'email': self.email, 'phone': self.phone,
                 'name': self.name, 'surname': self.surname,
+                'appeal': self.appeal.json(),
                 'calls': [call.json() for call in self.calls.all()]}

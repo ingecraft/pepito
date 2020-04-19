@@ -47,5 +47,6 @@ class DonationModel(db.Model):
         db.session.commit()
 
     def json(self):
-        return {'frequency': self.frequency, 'amount': self.amount,
-                'lead_id': self.lead_id, 'operator_id': self.operator_id}
+        return {'id': self.id, 'frequency': self.frequency,
+                'amount': self.amount, 'lead_id': self.lead_id,
+                'operator_id': self.operator_id}

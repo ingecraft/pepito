@@ -5,10 +5,14 @@ from models.assets.donation import DonationModel
 
 class Donation(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('title',
+    parser.add_argument('frequency',
                         type=str)
-    parser.add_argument('url',
-                        type=str)
+    parser.add_argument('amount',
+                        type=float)
+    parser.add_argument('lead_id',
+                        type=int)
+    parser.add_argument('operator_id',
+                        type=int)
 
     def get(self, id):
         donation = DonationModel.find_by_id(id)
@@ -19,36 +23,34 @@ class Donation(Resource):
         return {'message': 'There is no donation with this id'}
 
     def put(self, id):
-        pass
-#        appeal = AppealModel.find_by_id(id)
-#
-#        if appeal:
-#            data = self.parser.parse_args()
-#
-#            for attribute, value in data.items():
-#                if value:
-#                    setattr(appeal, attribute, value)
-#
-#            try:
-#                appeal.save_to_db()
-#                return appeal.json()
-#            except Exception:
-#                return {'message': 'An error occured updating'
-#                        'an appeal.'}, 500
-#
-#        return {'message': 'There is no appeal with this id'}
-#
+        donation = DonationModel.find_by_id(id)
+
+        if donation:
+            data = self.parser.parse_args()
+
+            for attribute, value in data.items():
+                if value:
+                    setattr(donation, attribute, value)
+
+            try:
+                donation.save_to_db()
+                return donation.json()
+            except Exception:
+                return {'message': 'An error occured updating'
+                        'an donation.'}, 500
+
+        return {'message': 'There is no donation with this id'}
 
     def delete(self, id):
         pass
-#        appeal = AppealModel.find_by_id(id)
-#
-#        try:
-#            appeal.delete_from_db()
-#        except Exception:
-#            return {'message': 'Error deleting the appeal'}, 500
-#
-#        return {'message': 'Appeal deleted'}
+        donation = DonationModel.find_by_id(id)
+
+        try:
+            donation.delete_from_db()
+        except Exception:
+            return {'message': 'Error deleting the donation'}, 500
+
+        return {'message': 'Donation deleted'}
 
 
 class DonationList(Resource):

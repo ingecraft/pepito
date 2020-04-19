@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from flask_restful import Resource, reqparse
 
 from models.assets.donation import DonationModel
@@ -73,9 +71,8 @@ class DonationList(Resource):
                         help='A lead is required')
 
     def get(self):
-        pass
-        return {'appeals': [appeal.json() for appeal in
-                            DonationModel.query.all()]}
+        return {'donations': [donation.json() for donation in
+                              DonationModel.query.all()]}
 
     def post(self):
         data = self.parser.parse_args()

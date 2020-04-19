@@ -1,9 +1,11 @@
+from datetime import datetime
+
 from flask_restful import Resource, reqparse
 
-from models.assets.appeal import AppealModel
+from models.assets.donation import DonationModel
 
 
-class Appeal(Resource):
+class Donation(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('title',
                         type=str)
@@ -11,60 +13,77 @@ class Appeal(Resource):
                         type=str)
 
     def get(self, id):
-        appeal = AppealModel.find_by_id(id)
+        donation = DonationModel.find_by_id(id)
 
-        if appeal:
-            return appeal.json()
+        if donation:
+            return donation.json()
 
-        return {'message': 'There is no appeal with this id'}
+        return {'message': 'There is no donation with this id'}
 
     def put(self, id):
-        appeal = AppealModel.find_by_id(id)
-
-        if appeal:
-            data = self.parser.parse_args()
-
-            for attribute, value in data.items():
-                if value:
-                    setattr(appeal, attribute, value)
-
-            try:
-                appeal.save_to_db()
-                return appeal.json()
-            except Exception:
-                return {'message': 'An error occured updating'
-                        'an appeal.'}, 500
-
-        return {'message': 'There is no appeal with this id'}
-
+        pass
+#        appeal = AppealModel.find_by_id(id)
+#
+#        if appeal:
+#            data = self.parser.parse_args()
+#
+#            for attribute, value in data.items():
+#                if value:
+#                    setattr(appeal, attribute, value)
+#
+#            try:
+#                appeal.save_to_db()
+#                return appeal.json()
+#            except Exception:
+#                return {'message': 'An error occured updating'
+#                        'an appeal.'}, 500
+#
+#        return {'message': 'There is no appeal with this id'}
+#
     def delete(self, id):
-        appeal = AppealModel.find_by_id(id)
+        pass
+#        appeal = AppealModel.find_by_id(id)
+#
+#        try:
+#            appeal.delete_from_db()
+#        except Exception:
+#            return {'message': 'Error deleting the appeal'}, 500
+#
+#        return {'message': 'Appeal deleted'}
 
-        try:
-            appeal.delete_from_db()
-        except Exception:
-            return {'message': 'Error deleting the appeal'}, 500
 
-        return {'message': 'Appeal deleted'}
-
-
-class AppealList(Resource):
+class DonationList(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('title',
-                        type=str)
-    parser.add_argument('url',
+    parser.add_argument('frequency',
                         type=str,
                         required=True,
-                        help='A URL is required')
+                        help='Frequency is required')
+    parser.add_argument('amount',
+                        type=float,
+                        required=True,
+                        help='Amount is required')
+    parser.add_argument('date_created',
+                        type=datetime.time,
+                        required=True,
+                        help='Amount is required')
+    parser.add_argument('operator_id',
+                        type=int,
+                        required=True,
+                        help='An operator is required')
+    parser.add_argument('lead_id',
+                        type=int,
+                        required=True,
+                        help='A lead is required')
 
     def get(self):
+        pass
         return {'appeals': [appeal.json() for appeal in
-                            AppealModel.query.all()]}
+                            DonationModel.query.all()]}
 
     def post(self):
         data = self.parser.parse_args()
 
-        if AppealModel.find_by_url(data['url']):
+        if DonationModel.find_by_url(data['url']):
             return {'message': 'There is already a lead with this url'}
 
         appeal = AppealModel(**data)

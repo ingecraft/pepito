@@ -9,6 +9,7 @@ from resources.people.operator import Operator, OperatorList
 from resources.people.lead import Lead, LeadList
 from resources.assets.call import Call, CallList
 from resources.assets.appeal import Appeal, AppealList
+from resources.assets.donation import Donation, DonationList
 
 app = Flask(__name__)
 app.config.from_object(config['development'])
@@ -32,6 +33,8 @@ api.add_resource(Call, '/calls/<int:id>')
 api.add_resource(CallList, '/calls')
 api.add_resource(Appeal, '/appeals/<int:id>')
 api.add_resource(AppealList, '/appeals')
+api.add_resource(Donation, '/donations/<int:id>')
+api.add_resource(DonationList, '/donations')
 
 
 if __name__ == "__main__":

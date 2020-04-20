@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 
-from models.people.lead import LeadModel
+from application.models.lead import LeadModel
 
 
 class Lead(Resource):

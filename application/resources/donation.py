@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 
-from models.assets.donation import DonationModel
+from application.models.donation import DonationModel
 
 
 class Donation(Resource):

@@ -1,4 +1,4 @@
-from db import db
+from application.db import db
 
 
 class LeadModel(db.Model):

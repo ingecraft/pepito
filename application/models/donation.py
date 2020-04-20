@@ -1,6 +1,6 @@
 from sqlalchemy.types import Enum
 
-from db import db
+from application.db import db
 
 frequencies = ('Annual', 'Monthly', 'Once Off')
 frequencies_enum = Enum(*frequencies, name="frequencies")

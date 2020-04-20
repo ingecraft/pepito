@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from db import db
+from application.db import db
 
 
 class CallModel(db.Model):

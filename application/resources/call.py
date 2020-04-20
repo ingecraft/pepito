@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 
-from models.assets.call import CallModel
+from application.models.call import CallModel
 
 
 class Call(Resource):

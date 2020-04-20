@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 
-from models.assets.appeal import AppealModel
+from application.models.appeal import AppealModel
 
 
 class Appeal(Resource):

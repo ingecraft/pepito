@@ -7,6 +7,7 @@ class TestTemplate(unittest.TestCase):
         self.app = create_app('testing')
         self.app_context = self.app.app_context()
         self.app_context.push()
+        self.client = self.app.test_client()
         db.create_all()
 
     def tearDown(self):

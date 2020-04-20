@@ -1,4 +1,4 @@
-from application.db import db
+from application import db
 
 
 class OperatorModel(db.Model):

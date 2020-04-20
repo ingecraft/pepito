@@ -1,14 +1,10 @@
 from flask import Flask
 from flask_restful import Api
+from flask_sqlalchemy import SQLAlchemy
 
 from config import config
-from application.db import db
 
-from application.resources.operator import Operator, OperatorList
-from application.resources.lead import Lead, LeadList
-from application.resources.call import Call, CallList
-from application.resources.appeal import Appeal, AppealList
-from application.resources.donation import Donation, DonationList
+db = SQLAlchemy()
 
 
 def create_app(config_name):
@@ -20,6 +16,12 @@ def create_app(config_name):
     api = Api(app)
 
     with app.app_context():
+        from application.resources.operator import Operator, OperatorList
+        from application.resources.lead import Lead, LeadList
+        from application.resources.call import Call, CallList
+        from application.resources.appeal import Appeal, AppealList
+        from application.resources.donation import Donation, DonationList
+
         api.add_resource(Operator, '/operators/<int:id>')
         api.add_resource(OperatorList, '/operators')
         api.add_resource(Lead, '/leads/<int:id>')

@@ -1,8 +1,9 @@
 import unittest
+
 from application import create_app, db
 
 
-class TestTemplate(unittest.TestCase):
+class BaseCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app('testing')
         self.app_context = self.app.app_context()

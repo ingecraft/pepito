@@ -47,8 +47,9 @@ class Operator(Resource):
 
         if operator:
             operator.delete_from_db()
+            return {'message': 'Operator deleted'}
 
-        return {'message': 'Operator deleted'}
+        return {'message': 'There is no operator with this id'}, 404
 
 
 class OperatorList(Resource):

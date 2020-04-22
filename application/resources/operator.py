@@ -20,7 +20,7 @@ class Operator(Resource):
         if operator:
             return operator.json()
 
-        return {'message': "There is no operator with given id"}
+        return {'message': "There is no operator with given id"}, 404
 
     def put(self, id):
         operator = OperatorModel.find_by_id(id)

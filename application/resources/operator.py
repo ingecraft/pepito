@@ -40,7 +40,7 @@ class Operator(Resource):
 
             return operator.json()
 
-        return {'message': 'There is no operator with this id'}
+        return {'message': 'There is no operator with this id'}, 404
 
     def delete(self, id):
         operator = OperatorModel.find_by_id(id)

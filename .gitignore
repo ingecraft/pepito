@@ -10,3 +10,5 @@ data.db
 env_vars
 
 *pyc
+
+tmp

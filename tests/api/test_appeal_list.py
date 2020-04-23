@@ -50,23 +50,53 @@ class OperatorListPostCase(BaseCase):
         data = {'url': url}
         response = self.client.post('/appeals', data=data)
         self.assertEquals(response.status_code, 400)
-#
-# class OperatorListGetCase(BaseCase):
-#    def post_test_operator(self, name):
-#        data = {'username': name}
-#        self.client.post('/operators', data=data)
-#
-#    def test_get_no_operators(self):
-#        response = self.client.get('/operators')
-#        self.assertEquals(response.json, {'operators': []})
-#
-#    def test_get_one_operator(self):
-#        self.post_test_operator('Bob')
-#        response = self.client.get('/operators')
-#        self.assertEquals(len(response.json['operators']), 1)
-#
-#    def test_get_many_operators(self):
-#        self.post_test_operator('Bob')
-#        self.post_test_operator('Bill')
-#        response = self.client.get('/operators')
-#        self.assertEquals(len(response.json['operators']), 2)
+
+
+class OperatorListGetCase(BaseCase):
+    def post_test_appeal(self, url):
+        appeal = AppealModel('test', url)
+        appeal.save_to_db()
+
+        return appeal
+
+    def test_get_no_appeals_json(self):
+        response = self.client.get('/appeals')
+
+        self.assertEquals(response.json, {'appeals': []})
+
+    def test_get_no_appeals_status(self):
+        response = self.client.get('/appeals')
+
+        self.assertEquals(response.status_code, 200)
+
+    def test_get_one_appeal_json(self):
+        appeal = self.post_test_appeal('gmail.com')
+
+        response = self.client.get('/appeals')
+
+        self.assertEquals(response.json,
+                          {'appeals': [appeal.json()]})
+
+    def test_get_one_appeal_status(self):
+        self.post_test_appeal('gmail.com')
+
+        response = self.client.get('/appeals')
+        self.assertEquals(response.status_code, 200)
+
+    def test_get_many_appeals_json(self):
+        appeals = [self.post_test_appeal('bing.com'),
+                   self.post_test_appeal('gmail.com')]
+
+        response = self.client.get('/appeals')
+
+        self.assertEquals(response.json,
+                          {'appeals':
+                           [appeal.json() for appeal in appeals]})
+
+    def test_get_many_appeals_status(self):
+        self.post_test_appeal('bing.com')
+        self.post_test_appeal('gmail.com')
+
+        response = self.client.get('/appeals')
+
+        self.assertEquals(response.status_code, 200)

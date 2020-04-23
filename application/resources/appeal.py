@@ -65,7 +65,7 @@ class AppealList(Resource):
         data = self.parser.parse_args()
 
         if AppealModel.find_by_url(data['url']):
-            return {'message': 'There is already a lead with this url'}
+            return {'message': 'There is already an appeal with this url'}, 400
 
         appeal = AppealModel(**data)
 

@@ -3,7 +3,8 @@ from application.models.appeal import AppealModel
 
 
 class AppealGetCase(BaseCase):
-    def create_appeal(self):
+    @classmethod
+    def create_appeal(cls):
         appeal = AppealModel('Test title', 'test.url')
         appeal.save_to_db()
         return appeal

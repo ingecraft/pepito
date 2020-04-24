@@ -60,6 +60,11 @@ class LeadList(Resource):
                         type=str,
                         required=True,
                         help="Phone is required")
+    parser.add_argument('appeal_id',
+                        type=int,
+                        required=True,
+                        help='An appeal id  is required')
+
     parser.add_argument('name',
                         type=str)
     parser.add_argument('surname',

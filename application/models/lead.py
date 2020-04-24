@@ -15,11 +15,12 @@ class LeadModel(db.Model):
     appeal_id = db.Column(db.Integer, db.ForeignKey('appeals.id'))
     appeal = db.relationship('AppealModel')
 
-    def __init__(self, email, phone, name, surname):
+    def __init__(self, email, phone, name, surname, appeal_id):
         self.email = email
         self.phone = phone
         self.name = name
         self.surname = surname
+        self.appeal_id = appeal_id
 
     @classmethod
     def find_by_id(cls, _id):

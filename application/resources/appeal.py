@@ -40,12 +40,14 @@ class Appeal(Resource):
     def delete(self, id):
         appeal = AppealModel.find_by_id(id)
 
-        try:
-            appeal.delete_from_db()
-        except Exception:
-            return {'message': 'Error deleting the appeal'}, 500
+        if appeal:
+            try:
+                appeal.delete_from_db()
+                return {'message': 'Appeal deleted'}
+            except Exception:
+                return {'message': 'Error deleting the appeal'}, 500
 
-        return {'message': 'Appeal deleted'}
+        return {'message': 'There is no appeal with this id'}, 404
 
 
 class AppealList(Resource):

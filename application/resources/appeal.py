@@ -35,7 +35,7 @@ class Appeal(Resource):
                 return {'message': 'An error occured updating'
                         'an appeal.'}, 500
 
-        return {'message': 'There is no appeal with this id'}
+        return {'message': 'There is no appeal with this id'}, 404
 
     def delete(self, id):
         appeal = AppealModel.find_by_id(id)

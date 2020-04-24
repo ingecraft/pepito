@@ -16,7 +16,7 @@ class Appeal(Resource):
         if appeal:
             return appeal.json()
 
-        return {'message': 'There is no appeal with this id'}
+        return {'message': 'There is no appeal with this id'}, 404
 
     def put(self, id):
         appeal = AppealModel.find_by_id(id)

@@ -20,7 +20,7 @@ class Donation(Resource):
         if donation:
             return donation.json()
 
-        return {'message': 'There is no donation with this id'}
+        return {'message': 'There is no donation with this id'}, 404
 
     def put(self, id):
         donation = DonationModel.find_by_id(id)
@@ -39,18 +39,19 @@ class Donation(Resource):
                 return {'message': 'An error occured updating'
                         'an donation.'}, 500
 
-        return {'message': 'There is no donation with this id'}
+        return {'message': 'There is no donation with this id'}, 404
 
     def delete(self, id):
-        pass
         donation = DonationModel.find_by_id(id)
 
-        try:
-            donation.delete_from_db()
-        except Exception:
-            return {'message': 'Error deleting the donation'}, 500
+        if donation:
+            try:
+                donation.delete_from_db()
+                return {'message': 'Donation deleted'}
+            except Exception:
+                return {'message': 'Error deleting the donation'}, 500
 
-        return {'message': 'Donation deleted'}
+        return {'message': 'There is no donation with this id'}, 404
 
 
 class DonationList(Resource):

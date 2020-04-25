@@ -1,4 +1,5 @@
 from application.models.lead import LeadModel
+from application.models.appeal import AppealModel
 
 from tests.test_template import BaseCase
 from tests.api.test_appeal import AppealGetCase as ap
@@ -7,8 +8,11 @@ from tests.api.test_appeal import AppealGetCase as ap
 class LeadListPostCase(BaseCase):
     @classmethod
     def post_test_lead(cls):
+        appeal = AppealModel('Test Title', 'title.url')
+        appeal.save_to_db()
+
         lead = LeadModel('test@test.com', '1111222233', 'Test',
-                         'Tester', 1)
+                         'Tester', appeal.id)
         lead.save_to_db()
         return lead
 
@@ -20,6 +24,7 @@ class LeadListPostCase(BaseCase):
     def test_post_lead_with_required_fields_status(self):
         appeal = self.create_appeal()
         _id = appeal.json()['id']
+        print(_id)
 
         data = {'email': 'test@test.com', 'phone': '1111222233',
                 'appeal_id': _id}
@@ -29,10 +34,10 @@ class LeadListPostCase(BaseCase):
 
     def test_post_lead_with_required_fields_json(self):
         appeal = self.create_appeal()
-        _id = appeal.json()['id']
+        appeal_id = appeal.json()['id']
 
         data = {'email': 'test@test.com', 'phone': '1111222233',
-                'appeal_id': _id}
+                'appeal_id': appeal_id}
 
         response = self.client.post('/leads', data=data)
 
@@ -56,68 +61,56 @@ class LeadListPostCase(BaseCase):
         self.assertEqual(response.json,
                          {'message': {'email': 'Email is required'}})
 
-#    def test_post_existing_appeal_json(self):
-#        appeal = self.post_test_appeal()
-#        url = appeal.url
-#        data = {'url': url}
-#        response = self.client.post('/appeals', data=data)
-#        self.assertEquals(response.json,
-#                          {'message':
-#                           'There is already an appeal with this url'})
-#
-#    def test_post_existing_appeal_status(self):
-#        appeal = self.post_test_appeal()
-#        url = appeal.url
-#        data = {'url': url}
-#        response = self.client.post('/appeals', data=data)
-#        self.assertEquals(response.status_code, 400)
-#
-#
-#class OperatorListGetCase(BaseCase):
-#    def post_test_appeal(self, url):
-#        appeal = AppealModel('test', url)
-#        appeal.save_to_db()
-#
-#        return appeal
-#
-#    def test_get_no_appeals_json(self):
-#        response = self.client.get('/appeals')
-#
-#        self.assertEquals(response.json, {'appeals': []})
-#
-#    def test_get_no_appeals_status(self):
-#        response = self.client.get('/appeals')
-#
-#        self.assertEquals(response.status_code, 200)
-#
-#    def test_get_one_appeal_json(self):
-#        appeal = self.post_test_appeal('gmail.com')
-#
-#        response = self.client.get('/appeals')
-#
-#        self.assertEquals(response.json,
-#                          {'appeals': [appeal.json()]})
-#
-#    def test_get_one_appeal_status(self):
-#        self.post_test_appeal('gmail.com')
-#
-#        response = self.client.get('/appeals')
-#        self.assertEquals(response.status_code, 200)
-#
-#    def test_get_many_appeals_json(self):
-#        appeals = [self.post_test_appeal('bing.com'),
-#                   self.post_test_appeal('gmail.com')]
-#
-#        response = self.client.get('/appeals')
-#
-#        self.assertEquals(response.json,
-#                          {'appeals':
-#                           [appeal.json() for appeal in appeals]})
-#
-#    def test_get_many_appeals_status(self):
-#        self.post_test_appeal('bing.com')
-#        self.post_test_appeal('gmail.com')
-#
-#        response = self.client.get('/appeals')
-#
-#        self.assertEquals(response.status_code, 200)
+    def test_post_existing_lead_json(self):
+        lead = self.post_test_lead()
+        email = lead.email
+
+        data = {'email': email, 'phone': '12222222', 'appeal_id': 1}
+        response = self.client.post('/leads', data=data)
+
+        self.assertEqual(response.json,
+                         {'message':
+                          'There is already a lead with this email'})
+
+    def test_post_existing_lead_status(self):
+        lead = self.post_test_lead()
+        email = lead.email
+        data = {'email': email}
+        response = self.client.post('/leads', data=data)
+        self.assertEqual(response.status_code, 400)
+
+
+class OperatorListGetCase(BaseCase):
+    @classmethod
+    def post_test_lead(cls):
+        appeal = AppealModel('Test Title', 'title.url')
+        appeal.save_to_db()
+
+        lead = LeadModel('test@test.com', '1111222233', 'Test',
+                         'Tester', appeal.id)
+        lead.save_to_db()
+        return lead
+
+    def test_get_no_leads_json(self):
+        response = self.client.get('/leads')
+
+        self.assertEqual(response.json, {'leads': []})
+
+    def test_get_no_leads(self):
+        response = self.client.get('/appeals')
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_one_lead_json(self):
+        lead = self.post_test_lead()
+
+        response = self.client.get('/leads')
+
+        self.assertEqual(response.json,
+                         {'leads': [lead.json()]})
+
+    def test_get_one_lead_status(self):
+        self.post_test_lead()
+
+        response = self.client.get('/leads')
+        self.assertEqual(response.status_code, 200)

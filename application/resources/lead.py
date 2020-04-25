@@ -45,9 +45,13 @@ class Lead(Resource):
         lead = LeadModel.find_by_id(id)
 
         if lead:
-            lead.delete_from_db()
+            try:
+                lead.delete_from_db()
+                return {'message': 'Lead deleted'}
+            except Exception:
+                return {'message': 'Error deleting a lead'}, 500
 
-        return {'message': 'Lead deleted'}
+        return {'message': 'There is no lead with this email'}, 404
 
 
 class LeadList(Resource):

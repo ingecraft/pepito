@@ -80,43 +80,50 @@ class AppealDeleteCase(BaseCase):
         self.assertEqual(response.status_code, 200)
 
 
-#class AppealPutCase(BaseCase):
-#    def create_lead(self):
-#        lead = AppealModel('Test title', 'test.url')
-#        lead.save_to_db()
-#
-#        return lead
-#
-#    def test_put_with_no_existing_id_json(self):
-#        data = {}
-#
-#        response = self.client.put("leads/2", data=data)
-#        self.assertEqual(response.json,
-#                         {'message': 'There is no lead with this id'})
-#
-#    def test_put_with_no_existing_id_status(self):
-#        data = {}
-#
-#        response = self.client.put('/leads/2', data=data)
-#        self.assertEqual(response.status_code, 404)
-#
-#    def test_put_with_existing_id_json(self):
-#        data = {'url': 'updated'}
-#
-#        lead = self.create_lead()
-#        _id = lead.json()['id']
-#
-#        response = self.client.put("/leads/{}".format(_id),
-#                                   data=data)
-#        self.assertEqual(response.json,
-#                         {'id': _id, 'url': 'updated', 'title': 'Test title'})
-#
-#    def test_put_with_existing_id_status(self):
-#        data = {'url': 'updated'}
-#
-#        lead = self.create_lead()
-#        _id = lead.json()['id']
-#
-#        response = self.client.put("/leads/{}".format(_id),
-#                                   data=data)
-#        self.assertEqual(response.status_code, 200)
+class AppealPutCase(BaseCase):
+    @classmethod
+    def create_lead(cls):
+        appeal = AppealModel('Test Title', 'title.url')
+        appeal.save_to_db()
+
+        lead = LeadModel('test@test.com', '1111222233', 'Test',
+                         'Tester', appeal.id)
+        lead.save_to_db()
+        return lead
+
+    def test_put_with_no_existing_id_json(self):
+        data = {}
+
+        response = self.client.put("leads/2", data=data)
+        self.assertEqual(response.json,
+                         {'message': 'There is no lead with this id'})
+
+    def test_put_with_no_existing_id_status(self):
+        data = {}
+
+        response = self.client.put('/leads/2', data=data)
+        self.assertEqual(response.status_code, 404)
+
+    def test_put_with_existing_id_json(self):
+        data = {'name': 'updated'}
+
+        lead = self.create_lead()
+        _id = lead.json()['id']
+
+        response = self.client.put("/leads/{}".format(_id),
+                                   data=data)
+        self.assertEqual(response.json,
+                         {'id': _id, 'email': 'test@test.com',
+                          'phone': '1111222233', 'name': 'updated',
+                          'surname': 'Tester', 'appeal': lead.appeal.json(),
+                          'calls': []})
+
+    def test_put_with_existing_id_status(self):
+        data = {'url': 'updated'}
+
+        lead = self.create_lead()
+        _id = lead.json()['id']
+
+        response = self.client.put("/leads/{}".format(_id),
+                                   data=data)
+        self.assertEqual(response.status_code, 200)

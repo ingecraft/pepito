@@ -39,7 +39,7 @@ class Lead(Resource):
 
             return lead.json()
 
-        return {'message': 'There is no lead with this id'}
+        return {'message': 'There is no lead with this id'}, 404
 
     def delete(self, id):
         lead = LeadModel.find_by_id(id)

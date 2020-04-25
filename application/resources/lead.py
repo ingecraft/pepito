@@ -20,7 +20,7 @@ class Lead(Resource):
         if lead:
             return lead.json()
 
-        return {'message': 'There is no lead with this email'}
+        return {'message': 'There is no lead with this email'}, 404
 
     def put(self, id):
         lead = LeadModel.find_by_id(id)

@@ -115,8 +115,8 @@ class OperatorListGetCase(BaseCase):
         self.assertEqual(response.json,
                          {'donations': [donation.json()]})
 
-#    def test_get_one_donation_status(self):
-#        self.post_test_donation()
-#
-#        response = self.client.get('/donations')
-#        self.assertEqual(response.status_code, 200)
+    def test_get_one_donation_status(self):
+        create_donation()
+
+        response = self.client.get('/donations')
+        self.assertEqual(response.status_code, 200)

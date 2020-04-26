@@ -81,7 +81,8 @@ class DonationList(Resource):
         data = self.parser.parse_args()
 
         if DonationModel.find_by_lead_id(data['lead_id']):
-            return {'message': 'There is already a donation for this lead'}
+            return {'message': 'There is already a donation for this lead'},\
+                     400
 
         donation = DonationModel(**data)
 

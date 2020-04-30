@@ -10,15 +10,19 @@ class Call(Resource):
         if call:
             return call.json()
 
-        return {'message': 'There is no call with this id'}
+        return {'message': 'There is no call with this id'}, 404
 
     def delete(self, id):
         call = CallModel.find_by_id(id)
 
         if call:
-            call.delete_from_db()
+            try:
+                call.delete_from_db()
+                return {'message': 'Call deleted'}
+            except Exception:
+                return {'message': 'Error while deleting the call'}, 500
 
-        return {'message': 'Call deleted'}
+        return {'message': 'There is no call with this id'}, 404
 
 
 class CallList(Resource):

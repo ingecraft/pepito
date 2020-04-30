@@ -23,54 +23,54 @@ def create_call():
     return call
 
 
-# class DonationGetCase(BaseCase):
-#     def test_get_donation_with_non_existing_id_response(self):
-#         response = self.client.get('/donations/1')
-# 
-#         self.assertEqual(response.json['message'],
-#                          'There is no donation with this id')
-# 
-#     def test_get_donation_with_non_existing_id_status(self):
-#         response = self.client.get('/donations/1')
+class DonationGetCase(BaseCase):
+    def test_get_call_with_non_existing_id_response(self):
+        response = self.client.get('/calls/1')
+
+        self.assertEqual(response.json['message'],
+                         'There is no call with this id')
+
+#     def test_get_call_with_non_existing_id_status(self):
+#         response = self.client.get('/calls/1')
 # 
 #         self.assertEqual(response.status_code, 404)
 # 
-#     def test_get_donation_with_existing_id_json(self):
-#         donation = create_donation()
+#     def test_get_call_with_existing_id_json(self):
+#         call = create_call()
 # 
-#         response = self.client.get("/donations/{}".format(donation.id))
-#         self.assertEqual(response.json, donation.json())
+#         response = self.client.get("/calls/{}".format(call.id))
+#         self.assertEqual(response.json, call.json())
 # 
 #     def test_get_with_existing_id_status(self):
-#         donation = create_donation()
+#         call = create_call()
 # 
-#         response = self.client.get("/donations/{}".format(donation.id))
+#         response = self.client.get("/calls/{}".format(call.id))
 #         self.assertEqual(response.status_code, 200)
 # 
 # 
 # class DonationDeleteCase(BaseCase):
 #     def test_delete_post_with_non_existing_id_json(self):
-#         response = self.client.delete('/donations/8')
+#         response = self.client.delete('/calls/8')
 # 
 #         self.assertEqual(response.json,
-#                          {'message': 'There is no donation with this id'})
+#                          {'message': 'There is no call with this id'})
 # 
 #     def test_delete_post_with_non_existing_id_status(self):
-#         response = self.client.delete('/donations/8')
+#         response = self.client.delete('/calls/8')
 # 
 #         self.assertEqual(response.status_code, 404)
 # 
 #     def test_delete_post_with_existing_id_json(self):
-#         donation = create_donation()
+#         call = create_call()
 # 
-#         response = self.client.delete("/donations/{}".format(donation.id))
+#         response = self.client.delete("/calls/{}".format(call.id))
 # 
 #         self.assertEqual(response.json, {'message': 'Donation deleted'})
 # 
 #     def test_delete_post_with_existing_id_status(self):
-#         donation = create_donation()
+#         call = create_call()
 # 
-#         response = self.client.delete("/donations/{}".format(donation.id))
+#         response = self.client.delete("/calls/{}".format(call.id))
 # 
 #         self.assertEqual(response.status_code, 200)
 # 
@@ -79,34 +79,34 @@ def create_call():
 #     def test_put_with_no_existing_id_json(self):
 #         data = {}
 # 
-#         response = self.client.put("donations/2", data=data)
+#         response = self.client.put("calls/2", data=data)
 #         self.assertEqual(response.json,
-#                          {'message': 'There is no donation with this id'})
+#                          {'message': 'There is no call with this id'})
 # 
 #     def test_put_with_no_existing_id_status(self):
 #         data = {}
 # 
-#         response = self.client.put('/donations/2', data=data)
+#         response = self.client.put('/calls/2', data=data)
 #         self.assertEqual(response.status_code, 404)
 # 
 #     def test_put_with_existing_id_json(self):
 #         data = {'frequency': 'Monthly'}
 # 
-#         donation = create_donation()
+#         call = create_call()
 # 
-#         response = self.client.put("/donations/{}".format(donation.id),
+#         response = self.client.put("/calls/{}".format(call.id),
 #                                    data=data)
 #         self.assertEqual(response.json,
-#                          {'id': donation.id, 'frequency': 'Monthly',
+#                          {'id': call.id, 'frequency': 'Monthly',
 #                           'amount': 30.00,
-#                           'operator_id': donation.operator.id,
-#                           'lead_id': donation.lead.id})
+#                           'operator_id': call.operator.id,
+#                           'lead_id': call.lead.id})
 # 
 #     def test_put_with_existing_id_status(self):
 #         data = {'frequency': 'Monthly'}
 # 
-#         donation = create_donation()
+#         call = create_call()
 # 
-#         response = self.client.put("/donations/{}".format(donation.id),
+#         response = self.client.put("/calls/{}".format(call.id),
 #                                    data=data)
 #         self.assertEqual(response.status_code, 200)
